@@ -93,8 +93,70 @@ namespace EvaFashion.Web.Data
                 }
             }
             context.SaveChanges();
-        }
+
+            // 3. Colors & Sizes
+            if (!context.MauSacs.Any())
+            {
+                context.MauSacs.AddRange(
+                    new MauSac { TenMau = "Trắng", MaHex = "#FFFFFF" },
+                    new MauSac { TenMau = "Đen", MaHex = "#000000" },
+                    new MauSac { TenMau = "Hồng", MaHex = "#FFC0CB" },
+                    new MauSac { TenMau = "Đỏ", MaHex = "#FF0000" },
+                    new MauSac { TenMau = "Xanh Dương", MaHex = "#0000FF" },
+                    new MauSac { TenMau = "Vàng", MaHex = "#FFFF00" },
+                    new MauSac { TenMau = "Kem", MaHex = "#F5F5DC" }
+                );
+            }
+
+            if (!context.KichCos.Any())
+            {
+                context.KichCos.AddRange(
+                    new KichCo { TenKichCo = "S" },
+                    new KichCo { TenKichCo = "M" },
+                    new KichCo { TenKichCo = "L" },
+                    new KichCo { TenKichCo = "XL" }
+                );
+            }
+            context.SaveChanges();
+
+            // 4. Variants (BienTheSanPham) - Ensure ALL products have variants
+            // Check if ANY product needs variants, not just if table is empty
+            var productsWithoutVariants = context.SanPhams
+                .Include(p => p.BienTheSanPhams)
+                .Where(p => !p.BienTheSanPhams.Any())
+                .ToList();
+
+            if (productsWithoutVariants.Any())
+            {
+                var colors = context.MauSacs.ToList();
+                var sizes = context.KichCos.ToList();
+                var random = new Random();
+
+                if (colors.Any() && sizes.Any())
+                {
+                    foreach (var p in productsWithoutVariants)
+                    {
+                        // Create variants: Take 2 random colors
+                        var selectedColors = colors.OrderBy(x => random.Next()).Take(2).ToList();
+
+                        foreach (var c in selectedColors)
+                        {
+                            foreach (var s in sizes)
+                            {
+                                context.BienTheSanPhams.Add(new BienTheSanPham
+                                {
+                                    SanPhamId = p.Id,
+                                    MauId = c.MaMau,
+                                    KichCoId = s.MaKichCo,
+                                    SoLuongTon = 50,
+                                    HinhAnh = p.HinhAnhChinh 
+                                });
+                            }
+                        }
+                    }
+                    context.SaveChanges();
+                }
+            }
     }
-    
-    // Add dummy property for compile if needed, but SanPham should match model
+}
 }

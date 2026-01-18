@@ -355,7 +355,34 @@ IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'mu-coi-vanh-rong')
     INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
     VALUES (@catPhuKien, N'Mũ Cói Vành Rộng', 'mu-coi-vanh-rong', 'Eva Accessories', N'Đi biển cực xinh.', 200000, 0, '/images/products/p15.png', 0, 1, @adminId);
 
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'khan-lua-cao-cap')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catPhuKien, N'Khăn Lụa Cao Cấp', 'khan-lua-cao-cap', 'Eva Silk', N'Họa tiết sang trọng.', 450000, 0, '/images/products/p16.png', 1, 1, @adminId);
+-- 6.4. Màu Sắc & Kích Cỡ
+IF NOT EXISTS (SELECT * FROM MauSac)
+BEGIN
+    INSERT INTO MauSac (tenMau, maHex) VALUES 
+    (N'Trắng', '#FFFFFF'), (N'Đen', '#000000'), (N'Hồng', '#FFC0CB'), 
+    (N'Đỏ', '#FF0000'), (N'Xanh Dương', '#0000FF'), (N'Vàng', '#FFFF00');
+END
+
+IF NOT EXISTS (SELECT * FROM KichCo)
+BEGIN
+    INSERT INTO KichCo (tenKichCo) VALUES ('S'), ('M'), ('L'), ('XL');
+END
+
+-- 6.5. Biến Thể Sản Phẩm (Tạo tự động cho các sản phẩm mẫu)
+-- Logic mẫu: Mỗi sản phẩm có tất cả các màu và size (đơn giản hóa)
+IF NOT EXISTS (SELECT * FROM BienTheSanPham)
+BEGIN
+    DECLARE @pId INT;
+    DECLARE @mId INT;
+    DECLARE @sId INT;
+    
+    -- Cursor để duyệt qua sản phẩm, màu, size (giả lập)
+    -- Ở đây chỉ insert mẫu cho vài sản phẩm đầu để demo
+    INSERT INTO BienTheSanPham (sanPhamId, mauId, kichCoId, soLuongTon, hinhAnh)
+    SELECT s.id, m.maMau, k.maKichCo, 50, s.hinhAnhChinh
+    FROM SanPham s
+    CROSS JOIN MauSac m
+    CROSS JOIN KichCo k
+    WHERE s.slug IN ('dam-hoa-mua-xuan', 'ao-blazer-cong-so', 'chan-vay-xep-ly', 'dam-da-hoi-cao-cap');
+END
 GO

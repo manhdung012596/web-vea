@@ -36,7 +36,7 @@ namespace EvaFashion.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId, int colorId, int sizeId, int quantity)
+        public async Task<IActionResult> AddToCart(int productId, int colorId, int sizeId, int quantity, bool buyNow = false)
         {
             // check variant
             var variant = await _context.BienTheSanPhams
@@ -75,6 +75,13 @@ namespace EvaFashion.Web.Controllers
             }
 
             SaveCart(cart);
+
+            SaveCart(cart);
+
+            if (buyNow)
+            {
+                return RedirectToAction("Index", "Checkout");
+            }
 
             return RedirectToAction(nameof(Index));
         }
