@@ -4,6 +4,14 @@
 USE master;
 GO
 
+-- XÓA DATABASE CŨ NẾU TỒN TẠI (ĐỂ LÀM MỚI DỮ LIỆU) --
+IF EXISTS (SELECT * FROM sys.databases WHERE name = N'thoitrangnu')
+BEGIN
+    ALTER DATABASE thoitrangnu SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE thoitrangnu;
+END;
+GO
+
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = N'thoitrangnu')
 BEGIN
     CREATE DATABASE thoitrangnu;
@@ -309,51 +317,7 @@ IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'dam-da-hoi-cao-cap')
     INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
     VALUES (@catVay, N'Đầm Dạ Hội Satin', 'dam-da-hoi-cao-cap', 'Eva Luxury', N'Quyến rũ, quý phái.', 1200000, 0, '/images/products/p4.png', 1, 1, @adminId);
 
--- SP 5-10
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'ao-so-mi-trang')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catAo, N'Áo Sơ Mi Trắng Cổ Điển', 'ao-so-mi-trang', 'Eva Basic', N'Chất liệu Cotton lụa.', 350000, 0, '/images/products/p5.png', 0, 1, @adminId);
 
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'quan-jeans-cap-cao')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catQuan, N'Quần Jeans Nữ Cạp Cao', 'quan-jeans-cap-cao', 'Eva Denim', N'Tôn dáng, thời thượng.', 450000, 0, '/images/products/p6.png', 1, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'tui-xach-da')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catPhuKien, N'Túi Xách Da Cao Cấp', 'tui-xach-da', 'Eva Bags', N'Da thật 100%.', 1500000, 0, '/images/products/p7.png', 1, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'giay-cao-got-den')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catPhuKien, N'Giày Cao Gót Đen', 'giay-cao-got-den', 'Eva Shoes', N'Gót nhọn sành điệu.', 650000, 10, '/images/products/p8.png', 0, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'kinh-mat-thoi-trang')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catPhuKien, N'Kính Mát Thời Trang', 'kinh-mat-thoi-trang', 'Eva Accessories', N'Chống tia UV.', 300000, 0, '/images/products/p9.png', 0, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'ao-thun-soc-ke')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catAo, N'Áo Thun Sọc Kẻ', 'ao-thun-soc-ke', 'Eva Casual', N'Thoải mái năng động.', 250000, 0, '/images/products/p10.png', 0, 1, @adminId);
-
--- SP 11-16
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'dam-maxi-vang')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catVay, N'Đầm Maxi Vàng Mùa Hè', 'dam-maxi-vang', 'Eva Summer', N'Phong cách Bohemian.', 580000, 15, '/images/products/p11.png', 1, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'ao-len-co-lo')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catAo, N'Áo Len Cổ Lọ', 'ao-len-co-lo', 'Eva Winter', N'Ấm áp, mềm mại.', 400000, 0, '/images/products/p12.png', 0, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'ao-khoac-jeans')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catAo, N'Áo Khoác Jeans', 'ao-khoac-jeans', 'Eva Denim', N'Bụi bặm, cá tính.', 600000, 0, '/images/products/p13.png', 0, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'quan-short-trang')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catQuan, N'Quần Short Trắng', 'quan-short-trang', 'Eva Shorts', N'Năng động mùa hè.', 320000, 5, '/images/products/p14.png', 0, 1, @adminId);
-
-IF NOT EXISTS (SELECT * FROM SanPham WHERE slug = 'mu-coi-vanh-rong')
-    INSERT INTO SanPham (danhMucId, tenSanPham, slug, thuongHieu, moTaNgan, giaGoc, phanTramGiam, hinhAnhChinh, noiBat, isActive, createdBy)
-    VALUES (@catPhuKien, N'Mũ Cói Vành Rộng', 'mu-coi-vanh-rong', 'Eva Accessories', N'Đi biển cực xinh.', 200000, 0, '/images/products/p15.png', 0, 1, @adminId);
 
 -- 6.4. Màu Sắc & Kích Cỡ
 IF NOT EXISTS (SELECT * FROM MauSac)

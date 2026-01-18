@@ -66,10 +66,24 @@
                             <a asp-controller="Variant" asp-action="Index" asp-route-productId="@item.Id" class="btn btn-sm btn-outline-info me-2" title="Quản lý biến thể">
                                 <i class="bi bi-layers"></i> Biến thể
                             </a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-2">
+                            
+                            @if (item.IsActive == true)
+                            {
+                                <a asp-action="ToggleStatus" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-2" title="Ẩn sản phẩm">
+                                    <i class="bi bi-eye-slash-fill"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="ToggleStatus" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success me-2" title="Hiện sản phẩm">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            }
+
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-2" title="Sửa">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Xóa vĩnh viễn">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>

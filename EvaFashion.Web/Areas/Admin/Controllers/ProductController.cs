@@ -186,6 +186,29 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
             return View(sanPham);
         }
 
+        public async Task<IActionResult> ToggleStatus(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var sanPham = await _context.SanPhams.FindAsync(id);
+            if (sanPham == null) return NotFound();
+
+            // Toggle logic
+            if (sanPham.IsActive == true)
+            {
+                sanPham.IsActive = false;
+            }
+            else
+            {
+                sanPham.IsActive = true;
+            }
+            
+            _context.Update(sanPham);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -205,10 +228,16 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
             var sanPham = await _context.SanPhams.FindAsync(id);
             if (sanPham != null)
             {
-                // Soft delete preferred, but user authorized physical delete in DB schema (no IsDeleted logic enforced yet, but IsActive exists)
-                // Using IsActive = false as per requirement "Xóa/Ẩn sản phẩm: Chuyển isActive sang False"
-                sanPham.IsActive = false;
-                _context.Update(sanPham);
+                // Hard delete as per user request "xóa hẳn... cập nhật vào database"
+                // Must ensure related data (variants, order details) are handled or cascading delete is enabled in DB
+                // Database schema usually handles cascading or we deleting dependent variants first
+                
+                // 1. Delete variants first to avoid FK constraint error
+                var variants = _context.BienTheSanPhams.Where(v => v.SanPhamId == id);
+                _context.BienTheSanPhams.RemoveRange(variants);
+
+                // 2. Delete the product
+                _context.SanPhams.Remove(sanPham);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));

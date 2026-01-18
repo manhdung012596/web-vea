@@ -11,7 +11,7 @@
                 <h5 class="card-title mb-0">Xác nhận xóa</h5>
             </div>
             <div class="card-body">
-                <p class="lead">Bạn đang thực hiện ẩn sản phẩm này khỏi hệ thống:</p>
+                <p class="lead text-danger fw-bold">CẢNH BÁO: Bạn đang thực hiện XÓA VĨNH VIỄN sản phẩm này khỏi hệ thống. Hành động này không thể hoàn tác!</p>
                 <dl class="row">
                     <dt class="col-sm-4">Tên sản phẩm</dt>
                     <dd class="col-sm-8 fw-bold">@Model.TenSanPham</dd>
@@ -27,7 +27,7 @@
                     <input type="hidden" asp-for="Id" />
                     <div class="d-flex justify-content-end gap-2 mt-4">
                         <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
-                        <button type="submit" class="btn btn-danger">Xóa (Ẩn)</button>
+                        <button type="submit" class="btn btn-danger">XÁC NHẬN XÓA VĨNH VIỄN</button>
                     </div>
                 </form>
             </div>

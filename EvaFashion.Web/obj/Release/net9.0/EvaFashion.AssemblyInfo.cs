@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EvaFashion")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9fb6500d22e9901c27b91912dbedb8bc79eecf05")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eea1e2d7c4f6601072dc1e0a67ce752be3bf76d8")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvaFashion")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvaFashion")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
