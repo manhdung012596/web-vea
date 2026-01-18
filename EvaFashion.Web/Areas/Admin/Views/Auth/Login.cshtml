@@ -1,0 +1,63 @@
+@{
+    Layout = null; 
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - EVA Fashion</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #343a40;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold">CMS ADMIN</h3>
+            <p class="text-muted">Đăng nhập hệ thống quản trị</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tài khoản</label>
+                <input type="text" class="form-control form-control-lg" name="tenDangNhap" placeholder="admin" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-bold">Mật khẩu</label>
+                <input type="password" class="form-control form-control-lg" name="matKhau" placeholder="******" required>
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg w-100">ĐĂNG NHẬP</button>
+        </form>
+        
+        <div class="text-center mt-3">
+            <a href="/" class="text-decoration-none text-muted small">&larr; Quay lại trang chủ</a>
+        </div>
+    </div>
+
+</body>
+</html>

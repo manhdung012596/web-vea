@@ -1,0 +1,96 @@
+@model IEnumerable<EvaFashion.Web.Models.DonHang>
+@{
+    ViewData["Title"] = "Quản lý Đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var currentStatus = ViewData["CurrentStatus"] as string;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Đơn hàng</h2>
+    <div>
+        <div class="btn-group" role="group">
+            <a asp-action="Index" asp-route-status="All" class="btn btn-outline-secondary @(currentStatus == "All" ? "active" : "")">Tất cả</a>
+            <a asp-action="Index" asp-route-status="ChoXacNhan" class="btn btn-outline-warning @(currentStatus == "ChoXacNhan" ? "active" : "")">Chờ xác nhận</a>
+            <a asp-action="Index" asp-route-status="DangGiao" class="btn btn-outline-info @(currentStatus == "DangGiao" ? "active" : "")">Đang giao</a>
+            <a asp-action="Index" asp-route-status="HoanThanh" class="btn btn-outline-success @(currentStatus == "HoanThanh" ? "active" : "")">Hoàn thành</a>
+            <a asp-action="Index" asp-route-status="DaHuy" class="btn btn-outline-danger @(currentStatus == "DaHuy" ? "active" : "")">Đã hủy</a>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Mã ĐH</th>
+                    <th>Khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Thanh toán</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end pe-4">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">#@item.MaDonHangCode</td>
+                            <td>
+                                <div class="fw-bold">@item.HoTen</div>
+                                <small class="text-muted">@item.SoDienThoai</small>
+                            </td>
+                            <td>@item.NgayDat?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="fw-bold">@item.TongTien?.ToString("N0") đ</td>
+                            <td>
+                                @if(item.TrangThaiThanhToan == "DaThanhToan")
+                                {
+                                    <span class="badge bg-success">Đã thanh toán</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa thanh toán</span>
+                                }
+                                <div class="small text-muted mt-1">@item.PhuongThucThanhToan</div>
+                            </td>
+                            <td>
+                                @if (item.TrangThai == "ChoXacNhan")
+                                {
+                                    <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                }
+                                else if (item.TrangThai == "DangGiao")
+                                {
+                                    <span class="badge bg-info">Đang giao</span>
+                                }
+                                else if (item.TrangThai == "HoanThanh")
+                                {
+                                    <span class="badge bg-success">Hoàn thành</span>
+                                }
+                                else if (item.TrangThai == "DaHuy")
+                                {
+                                    <span class="badge bg-danger">Đã hủy</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <a asp-action="Detail" asp-route-id="@item.MaDonHang" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            Chưa có đơn hàng nào trong mục này.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

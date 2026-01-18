@@ -1,0 +1,35 @@
+@model EvaFashion.Web.Models.MauSac
+@{
+    ViewData["Title"] = "Xóa màu sắc";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white py-3">
+                <h5 class="card-title mb-0">Xác nhận xóa</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead">Bạn có chắc chắn muốn xóa màu này không?</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Tên màu</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.TenMau</dd>
+
+                    <dt class="col-sm-4">Mã Hex</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge" style="background-color: @Model.MaHex; color: #fff; text-shadow: 0 0 2px black;">@Model.MaHex</span>
+                    </dd>
+                </dl>
+                
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="MaMau" />
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger">Xóa luôn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

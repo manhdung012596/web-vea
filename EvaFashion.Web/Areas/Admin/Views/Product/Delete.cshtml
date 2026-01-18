@@ -1,0 +1,36 @@
+@model EvaFashion.Web.Models.SanPham
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white py-3">
+                <h5 class="card-title mb-0">Xác nhận xóa</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead">Bạn đang thực hiện ẩn sản phẩm này khỏi hệ thống:</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Tên sản phẩm</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.TenSanPham</dd>
+
+                    <dt class="col-sm-4">Giá gốc</dt>
+                    <dd class="col-sm-8">@Model.GiaGoc.ToString("N0") đ</dd>
+                    
+                    <dt class="col-sm-4">Danh mục</dt>
+                    <dd class="col-sm-8">@Model.DanhMuc?.TenDanhMuc</dd>
+                </dl>
+                
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger">Xóa (Ẩn)</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

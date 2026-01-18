@@ -1,0 +1,60 @@
+@model IEnumerable<EvaFashion.Web.Models.LienHe>
+@{
+    ViewData["Title"] = "Hộp thư liên hệ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Hộp thư khách hàng</h2>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Người gửi</th>
+                    <th>Tiêu đề / Nội dung</th>
+                    <th>Ngày gửi</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end pe-4">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="@(item.DaDoc == false ? "fw-bold bg-white" : "text-muted")">
+                        <td class="ps-4">
+                            <div>@item.HoTen</div>
+                            <small class="text-muted">@item.Email</small>
+                        </td>
+                        <td>
+                            <div>@item.TieuDe</div>
+                            <small class="text-truncate d-block" style="max-width: 300px;">@item.NoiDung</small>
+                            <span class="badge bg-light text-dark border mt-1">@item.LoaiLienHe</span>
+                        </td>
+                        <td>@item.NgayGui?.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (item.TrangThai == "DaXuLy")
+                            {
+                                <span class="badge bg-success">Đã xử lý</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            @if (item.TrangThai != "DaXuLy")
+                            {
+                                <a asp-action="MarkProcessed" asp-route-id="@item.MaLienHe" class="btn btn-sm btn-outline-success" title="Đánh dấu đã xử lý">
+                                    <i class="bi bi-check-lg"></i> Xử lý
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

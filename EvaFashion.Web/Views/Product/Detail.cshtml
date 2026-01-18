@@ -1,0 +1,181 @@
+@model EvaFashion.Web.Models.SanPham
+
+@{
+    ViewData["Title"] = Model.TenSanPham;
+}
+
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="/Shop">Sản phẩm</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.TenSanPham</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-4">
+            <div class="product-gallery">
+                <img src="@Model.HinhAnhChinh" class="img-fluid rounded shadow-sm w-100" alt="@Model.TenSanPham" id="mainImage">
+                <div class="row mt-3">
+                    @if (Model.BienTheSanPhams != null)
+                    {
+                        foreach (var variant in Model.BienTheSanPhams.Where(v => !string.IsNullOrEmpty(v.HinhAnh)).Take(4))
+                        {
+                            <div class="col-3">
+                                <img src="@variant.HinhAnh" class="img-fluid rounded cursor-pointer thumbnail-img" onclick="changeImage(this.src)" style="cursor: pointer;">
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h1 class="display-6 fw-bold text-dark">@Model.TenSanPham</h1>
+            <p class="text-muted">Mã SP: #@Model.Id | Thương hiệu: @(Model.ThuongHieu ?? "Dang cap nhat")</p>
+            
+            <div class="mb-3">
+                @if (Model.PhanTramGiam > 0)
+                {
+                    <span class="h3 fw-bold text-danger me-2">@Model.GiaSauGiam?.ToString("N0") đ</span>
+                    <span class="text-decoration-line-through text-muted">@Model.GiaGoc.ToString("N0") đ</span>
+                    <span class="badge bg-danger ms-2">-@Model.PhanTramGiam%</span>
+                }
+                else
+                {
+                    <span class="h3 fw-bold text-primary">@Model.GiaGoc.ToString("N0") đ</span>
+                }
+            </div>
+
+            <p class="lead">@Model.MoTaNgan</p>
+
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <input type="hidden" name="productId" value="@Model.Id" />
+                
+                <!-- Colors -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Màu sắc:</label>
+                    <div class="d-flex gap-2">
+                        @{
+                            var colors = Model.BienTheSanPhams?.Select(b => b.MauSac).DistinctBy(m => m.MaMau).ToList();
+                        }
+                        @if (colors != null)
+                        {
+                            foreach (var color in colors)
+                            {
+                                <input type="radio" class="btn-check" name="colorId" id="color_@color.MaMau" value="@color.MaMau" autocomplete="off" required>
+                                <label class="btn btn-outline-secondary" for="color_@color.MaMau" 
+                                       style="min-width: 40px; border-color: #dee2e6;">
+                                    @if (!string.IsNullOrEmpty(color.MaHex))
+                                    {
+                                        <div style="width: 20px; height: 20px; background-color: @color.MaHex; border-radius: 50%; border: 1px solid #ddd; margin: 0 auto;"></div>
+                                    }
+                                    @color.TenMau
+                                </label>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Sizes -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Kích cỡ:</label>
+                    <div class="d-flex gap-2">
+                        @{
+                            var sizes = Model.BienTheSanPhams?.Select(b => b.KichCo).DistinctBy(k => k.MaKichCo).ToList();
+                        }
+                        @if (sizes != null)
+                        {
+                            foreach (var size in sizes)
+                            {
+                                <input type="radio" class="btn-check" name="sizeId" id="size_@size.MaKichCo" value="@size.MaKichCo" autocomplete="off" required>
+                                <label class="btn btn-outline-secondary px-3" for="size_@size.MaKichCo">@size.TenKichCo</label>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Số lượng:</label>
+                    <div class="input-group" style="width: 140px;">
+                        <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity()">-</button>
+                        <input type="number" class="form-control text-center" name="quantity" id="quantity" value="1" min="1">
+                        <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg custom-pink-btn">
+                        <i class="bi bi-cart-plus me-2"></i> Thêm vào giỏ hàng
+                    </button>
+                    <button type="button" class="btn btn-outline-dark btn-lg">
+                        Mua ngay
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-5">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Mô tả sản phẩm</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">Chính sách giao hàng</button>
+                    </li>
+                </ul>
+                <div class="tab-content p-3 border border-top-0 rounded-bottom" id="myTabContent">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel">
+                        @Html.Raw(Model.MoTaChiTiet)
+                    </div>
+                    <div class="tab-pane fade" id="shipping" role="tabpanel">
+                        <p>Miễn phí giao hàng cho đơn hàng từ 500k.</p>
+                        <p>Đổi trả trong vòng 7 ngày nếu lỗi nhà sản xuất.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeImage(src) {
+        document.getElementById('mainImage').src = src;
+    }
+    
+    function incrementQuantity() {
+        var qty = document.getElementById('quantity');
+        qty.value = parseInt(qty.value) + 1;
+    }
+    
+    function decrementQuantity() {
+        var qty = document.getElementById('quantity');
+        if (parseInt(qty.value) > 1) {
+            qty.value = parseInt(qty.value) - 1;
+        }
+    }
+</script>
+
+<style>
+    .custom-pink-btn {
+        background-color: #ffb7c5; 
+        border-color: #ffb7c5;
+        color: #fff;
+    }
+    .custom-pink-btn:hover {
+        background-color: #ff9eb0;
+        border-color: #ff9eb0;
+    }
+    .thumbnail-img:hover {
+        opacity: 0.8;
+        border: 1px solid #ffb7c5;
+    }
+    .btn-check:checked + .btn-outline-secondary {
+        background-color: #ffb7c5;
+        color: white;
+        border-color: #ffb7c5;
+    }
+</style>

@@ -1,0 +1,43 @@
+@model IEnumerable<EvaFashion.Web.Models.KichCo>
+@{
+    ViewData["Title"] = "Quản lý Kích cỡ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Kích cỡ (Size)</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-2"></i>Thêm mới
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Tên Kích cỡ</th>
+                    <th class="text-end pe-4">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="ps-4">@item.MaKichCo</td>
+                        <td class="fw-bold">@item.TenKichCo</td>
+                        <td class="text-end pe-4">
+                            <a asp-action="Edit" asp-route-id="@item.MaKichCo" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.MaKichCo" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

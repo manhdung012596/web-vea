@@ -1,0 +1,103 @@
+﻿@model IEnumerable<EvaFashion.Web.Models.SanPham>
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<!-- Banner Carousel -->
+<div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner" style="height: 500px;">
+        <div class="carousel-item active">
+            <img src="/images/slide1.png" asp-append-version="true" class="d-block w-100" alt="Bộ sưu tập Mùa Xuân" style="height: 500px; object-fit: cover; object-position: center 30%;">
+            <div class="carousel-caption d-none d-md-block text-start" style="left: 10%; bottom: 20%; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">
+                <h2 class="display-4 fw-bold text-white">Bộ sưu tập Mùa Xuân</h2>
+                <p class="lead text-white fw-bold">Khám phá phong cách mới mẻ và nữ tính.</p>
+                <a href="/Shop" class="btn btn-light text-dark fw-bold btn-lg rounded-pill px-5 shadow-sm">Mua ngay</a>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/images/slide2.png" asp-append-version="true" class="d-block w-100" alt="Summer Vibes" style="height: 500px; object-fit: cover; object-position: center;">
+             <div class="carousel-caption d-none d-md-block text-end" style="right: 10%; bottom: 20%; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">
+                <h2 class="display-4 fw-bold text-dark">Phong cách Tối giản</h2>
+                <p class="lead text-dark fw-bold">Tinh tế trong từng đường nét.</p>
+                <a href="/Shop" class="btn btn-dark btn-lg rounded-pill px-5 shadow-sm">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Featured Section -->
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-pink">Sản Phẩm Nổi Bật</h2>
+        <div class="d-flex justify-content-center">
+            <div style="width: 50px; height: 3px; background-color: #ffb7c5;"></div>
+        </div>
+        <p class="text-muted mt-2">Những thiết kế được yêu thích nhất tại EVA Fashion</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm product-card">
+                        <div class="position-relative overflow-hidden">
+                            <a href="/Product/Detail/@item.Id">
+                                <img src="@(string.IsNullOrEmpty(item.HinhAnhChinh) ? "https://placehold.co/400x500/png?text=No+Image" : item.HinhAnhChinh)" 
+                                     class="card-img-top" alt="@item.TenSanPham">
+                            </a>
+                            @if (item.PhanTramGiam > 0)
+                            {
+                                <span class="position-absolute top-0 start-0 m-2 badge bg-danger">
+                                    -@item.PhanTramGiam%
+                                </span>
+                            }
+                        </div>
+                        <div class="card-body text-center">
+                            <p class="card-text text-muted small mb-1">@(item.ThuongHieu ?? "EVA Fashion")</p>
+                            <h6 class="card-title">
+                                <a href="/Product/Detail/@item.Id" class="text-decoration-none text-dark fw-bold">@item.TenSanPham</a>
+                            </h6>
+                            <div class="mt-2">
+                                @if (item.PhanTramGiam > 0)
+                                {
+                                    <span class="fw-bold text-danger">@item.GiaSauGiam?.ToString("N0") đ</span>
+                                    <small class="text-decoration-line-through text-muted ms-1">@item.GiaGoc.ToString("N0") đ</small>
+                                }
+                                else
+                                {
+                                    <span class="fw-bold text-dark">@item.GiaGoc.ToString("N0") đ</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <p class="text-muted">Chưa có sản phẩm nổi bật nào.</p>
+        </div>
+    }
+</div>
+
+<style>
+    .product-card {
+        transition: transform 0.3s;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+    .text-pink { color: #d63384; }
+</style>

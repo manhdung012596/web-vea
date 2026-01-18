@@ -1,0 +1,164 @@
+@model EvaFashion.Web.Areas.Admin.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Tổng quan</h2>
+
+<div class="row g-3">
+    <!-- Total Revenue -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Doanh thu</h6>
+                        <h2 class="mt-2 mb-0">@Model.TotalRevenue.ToString("N0") đ</h2>
+                    </div>
+                    <i class="bi bi-currency-dollar fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- New Orders -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Đơn mới</h6>
+                        <h2 class="mt-2 mb-0">@Model.NewOrdersCount</h2>
+                    </div>
+                    <i class="bi bi-bag-plus fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Active Products -->
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Sản phẩm</h6>
+                        <h2 class="mt-2 mb-0">@Model.ProductCount</h2>
+                    </div>
+                    <i class="bi bi-box-seam fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Customers -->
+    <div class="col-md-3">
+        <div class="card bg-info text-white border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Khách hàng</h6>
+                        <h2 class="mt-2 mb-0">@Model.CustomerCount</h2>
+                    </div>
+                    <i class="bi bi-people fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Recent Orders -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0 fw-bold">Đơn hàng gần đây</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4">Mã ĐH</th>
+                                <th>Khách hàng</th>
+                                <th>Ngày đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentOrders != null && Model.RecentOrders.Any())
+                            {
+                                foreach (var order in Model.RecentOrders)
+                                {
+                                    <tr>
+                                        <td class="ps-4 fw-bold text-primary">#@order.MaDonHangCode</td>
+                                        <td>@(order.HoTen ?? "Khách lẻ")</td>
+                                        <td>@order.NgayDat?.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="fw-bold">@order.TongTien?.ToString("N0") đ</td>
+                                        <td>
+                                            @if (order.TrangThai == "ChoXacNhan")
+                                            {
+                                                <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                            }
+                                            else if (order.TrangThai == "HoanThanh")
+                                            {
+                                                <span class="badge bg-success">Hoàn thành</span>
+                                            }
+                                            else if (order.TrangThai == "DaHuy")
+                                            {
+                                                <span class="badge bg-danger">Đã hủy</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info">@order.TrangThai</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">Chưa có đơn hàng nào.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Low Stock Alert -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3 border-danger border-bottom-0">
+                <h5 class="card-title mb-0 fw-bold text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Sắp hết hàng</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    @if (Model.LowStockProducts != null && Model.LowStockProducts.Any())
+                    {
+                        foreach (var item in Model.LowStockProducts)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold text-truncate" style="max-width: 200px;">
+                                        @item.SanPham?.TenSanPham
+                                    </div>
+                                    <small class="text-muted">
+                                        @(item.MauSac?.TenMau ?? "-") / @(item.KichCo?.TenKichCo ?? "-")
+                                    </small>
+                                </div>
+                                <span class="badge bg-danger rounded-pill">SL: @item.SoLuongTon</span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                         <li class="list-group-item text-center text-muted py-4">Tồn kho ổn định</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

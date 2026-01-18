@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin EVA Fashion</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+        }
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: block;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: #fff;
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column p-3 text-white" style="width: 250px;">
+            <a href="/Admin/Dashboard" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-4 fw-bold">Admin EVA</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/Admin/Dashboard" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Category" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")">
+                        <i class="bi bi-tag me-2"></i> Danh mục
+                    </a>
+                </li>
+                <li>
+                    <a href="#submenuAttributes" data-bs-toggle="collapse" class="nav-link @(new[]{"Color", "Size"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "" : "collapsed")">
+                        <i class="bi bi-palette me-2"></i> Thuộc tính
+                    </a>
+                    <div class="collapse @(new[]{"Color", "Size"}.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "show" : "")" id="submenuAttributes">
+                        <ul class="nav flex-column ps-4 small">
+                            <li><a href="/Admin/Color" class="nav-link text-white-50 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Color" ? "text-white" : "")">Màu sắc</a></li>
+                            <li><a href="/Admin/Size" class="nav-link text-white-50 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Size" ? "text-white" : "")">Kích cỡ</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/Admin/Product" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")">
+                        <i class="bi bi-box-seam me-2"></i> Sản phẩm
+                    </a>
+                </li>
+                <li>
+                    <a data-bs-toggle="collapse" href="#marketingMenu" class="nav-link collapsed">
+                        <i class="bi bi-megaphone me-2"></i> Marketing
+                        <i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <div class="collapse" id="marketingMenu">
+                        <ul class="nav flex-column ps-4">
+                            <li><a href="/Admin/Article" class="nav-link text-white small py-1">Bài viết / Blog</a></li>
+                            <li><a href="/Admin/Voucher" class="nav-link text-white small py-1">Mã giảm giá</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/Admin/Contact" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active" : "")">
+                        <i class="bi bi-headset me-2"></i> Hỗ trợ
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Admin/Order" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")">
+                        <i class="bi bi-cart3 me-2"></i> Đơn hàng
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/User" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")">
+                        <i class="bi bi-people me-2"></i> Khách hàng
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>Admin</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="/">Về trang chủ</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/Account/Logout">Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 bg-light">
+            <div class="container-fluid p-4">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

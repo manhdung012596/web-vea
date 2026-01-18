@@ -1,0 +1,77 @@
+@model EvaFashion.Web.Models.Voucher
+@{
+    ViewData["Title"] = "Thêm Voucher";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0">Tạo mã giảm giá</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="MaCode" class="form-label">Mã Code (Ví dụ: SALE50)</label>
+                        <input asp-for="MaCode" class="form-control text-uppercase fw-bold" required />
+                        <span asp-validation-for="MaCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Loai" class="form-label">Loại giảm giá</label>
+                                <select asp-for="Loai" class="form-select">
+                                    <option value="Tien">Giảm theo tiền (VNĐ)</option>
+                                    <option value="PhanTram">Giảm theo %</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="GiamGia" class="form-label">Giá trị giảm</label>
+                                <input asp-for="GiamGia" class="form-control" type="number" required />
+                                <span asp-validation-for="GiamGia" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="NgayBatDau" class="form-label">Ngày bắt đầu</label>
+                                <input asp-for="NgayBatDau" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="NgayKetThuc" class="form-label">Ngày kết thúc</label>
+                                <input asp-for="NgayKetThuc" class="form-control" type="date" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="SoLuong" class="form-label">Số lượng mã</label>
+                        <input asp-for="SoLuong" class="form-control" type="number" value="100" />
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" asp-for="TrangThai" checked />
+                        <label class="form-check-label" asp-for="TrangThai">
+                            Kích hoạt ngay
+                        </label>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-primary">Tạo mã</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,154 @@
+@model EvaFashion.Web.Models.SanPham
+@{
+    ViewData["Title"] = Model.TenSanPham;
+    var colors = ViewBag.Colors as List<EvaFashion.Web.Models.MauSac>;
+    var sizes = ViewBag.Sizes as List<EvaFashion.Web.Models.KichCo>;
+    var relatedProducts = ViewBag.RelatedProducts as List<EvaFashion.Web.Models.SanPham>;
+}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-4">
+             <div class="main-image mb-3 p-1 border rounded shadow-sm">
+                <img id="mainImage" src="@(string.IsNullOrEmpty(Model.HinhAnhChinh) ? "https://placehold.co/500x600" : Model.HinhAnhChinh)" 
+                     class="img-fluid w-100" style="object-fit: cover; max-height: 600px;" alt="@Model.TenSanPham">
+            </div>
+            <!-- Thumbnails (Simplified for now) -->
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h1 class="fw-bold fs-2">@Model.TenSanPham</h1>
+            <div class="d-flex align-items-center mb-3">
+                <div class="text-warning small me-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-half"></i>
+                </div>
+                <small class="text-muted">(Đánh giá giả định)</small>
+            </div>
+
+            <div class="mb-4">
+                @if (Model.PhanTramGiam > 0)
+                {
+                     <span class="fs-3 fw-bold text-danger me-2">@Model.GiaSauGiam?.ToString("N0") đ</span>
+                     <span class="text-decoration-line-through text-muted fs-5">@Model.GiaGoc.ToString("N0") đ</span>
+                     <span class="badge bg-danger ms-2">Giảm @Model.PhanTramGiam%</span>
+                }
+                else
+                {
+                    <span class="fs-3 fw-bold text-dark">@Model.GiaGoc.ToString("N0") đ</span>
+                }
+            </div>
+
+            <p class="text-muted mb-4">@Model.MoTaNgan</p>
+
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <input type="hidden" name="productId" value="@Model.Id" />
+                
+                <!-- Color Selection -->
+                @if (colors != null && colors.Any())
+                {
+                    <div class="mb-3">
+                        <label class="fw-bold mb-2">Màu sắc:</label>
+                        <div class="d-flex gap-2">
+                            @foreach (var c in colors)
+                            {
+                                <input type="radio" class="btn-check" name="colorId" id="color-@c.MaMau" value="@c.MaMau" required>
+                                <label class="btn btn-outline-secondary rounded-circle p-1 d-flex align-items-center justify-content-center" 
+                                       for="color-@c.MaMau" style="width: 40px; height: 40px;" title="@c.TenMau">
+                                    <span style="width: 25px; height: 25px; background-color: @c.MaHex; border: 1px solid #ddd; border-radius: 50%;"></span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Size Selection -->
+                 @if (sizes != null && sizes.Any())
+                {
+                    <div class="mb-4">
+                        <label class="fw-bold mb-2">Kích cỡ:</label>
+                        <div class="d-flex gap-2">
+                            @foreach (var s in sizes)
+                            {
+                                <input type="radio" class="btn-check" name="sizeId" id="size-@s.MaKichCo" value="@s.MaKichCo" required>
+                                <label class="btn btn-outline-secondary" for="size-@s.MaKichCo" style="min-width: 50px;">
+                                    @s.TenKichCo
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="row align-items-end mb-4">
+                   <div class="col-auto">
+                        <label class="fw-bold mb-2">Số lượng:</label>
+                        <input type="number" name="quantity" class="form-control text-center" value="1" min="1" max="100" style="width: 80px;">
+                   </div>
+                   <div class="col">
+                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-0 shadow-sm">
+                            <i class="bi bi-bag-plus me-2"></i> THÊM VÀO GIỎ
+                        </button>
+                   </div>
+                </div>
+            </form>
+
+            <div class="accordion" id="prodAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#desc">
+                            Mô tả chi tiết
+                        </button>
+                    </h2>
+                    <div id="desc" class="accordion-collapse collapse show" data-bs-parent="#prodAccordion">
+                        <div class="accordion-body">
+                            @Model.MoTaChiTiet
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                     <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy">
+                            Chính sách đổi trả
+                        </button>
+                    </h2>
+                     <div id="policy" class="accordion-collapse collapse" data-bs-parent="#prodAccordion">
+                        <div class="accordion-body text-muted small">
+                            Đổi trả miễn phí trong vòng 7 ngày nếu lỗi do nhà sản xuất.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    @if (relatedProducts != null && relatedProducts.Any())
+    {
+        <div class="mt-5 pt-3 border-top">
+            <h3 class="fw-bold mb-4 text-center">Có thể bạn sẽ thích</h3>
+             <div class="row row-cols-2 row-cols-md-4 g-4">
+                @foreach (var item in relatedProducts)
+                {
+                     <div class="col">
+                         <div class="card h-100 border-0 shadow-sm">
+                             <a href="/Shop/Detail/@item.Id">
+                                 <img src="@(string.IsNullOrEmpty(item.HinhAnhChinh) ? "https://placehold.co/300x400" : item.HinhAnhChinh)" class="card-img-top" alt="@item.TenSanPham">
+                             </a>
+                             <div class="card-body text-center p-2">
+                                 <div class="fw-bold">
+                                     <a href="/Shop/Detail/@item.Id" class="text-decoration-none text-dark">@item.TenSanPham</a>
+                                 </div>
+                                 <div class="text-danger fw-bold small">@item.GiaGoc.ToString("N0") đ</div>
+                             </div>
+                         </div>
+                     </div>
+                }
+             </div>
+        </div>
+    }
+</div>

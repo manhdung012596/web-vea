@@ -1,0 +1,92 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand brand-font fw-bold fs-3 text-pink" href="/">EVA Fashion</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+@using EvaFashion.Web.Models
+@using Microsoft.EntityFrameworkCore
+@inject EvaFashionDbContext _context
+@{
+    var categories = await _context.DanhMucs.Take(5).ToListAsync();
+}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-nowrap @(Context.Request.Path == "/" ? "active" : "")" href="/">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-nowrap @(Context.Request.Path.Value.StartsWith("/Shop") && !Context.Request.Query.ContainsKey("categoryId") ? "active" : "")" href="/Shop">Sản phẩm</a>
+                </li>
+                @foreach (var cat in categories)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-nowrap @(Context.Request.Query["categoryId"] == cat.Id.ToString() ? "active" : "")" href="/Shop?categoryId=@cat.Id">@cat.TenDanhMuc</a>
+                    </li>
+                }
+            </ul>
+            <form class="d-flex me-3" action="/Shop" method="get">
+                <div class="input-group">
+                    <input class="form-control border-end-0" type="search" name="u" placeholder="Tìm kiếm..." aria-label="Search" value="@Context.Request.Query["u"]">
+                    <button class="btn btn-outline-secondary border-start-0 bg-white" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using EvaFashion.Web.Models
+@using System.Text.Json
+@{
+    var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+
+    var cartJson = HttpContextAccessor.HttpContext.Session.GetString("Cart");
+    var cartCount = 0;
+    if (!string.IsNullOrEmpty(cartJson))
+    {
+        var cart = JsonSerializer.Deserialize<List<CartItem>>(cartJson);
+        cartCount = cart?.Sum(c => c.Quantity) ?? 0;
+    }
+}
+            <div class="d-flex align-items-center">
+                <a href="/Cart" class="btn btn-link text-dark position-relative me-3">
+                    <i class="bi bi-cart3 fs-5"></i>
+                    @if (cartCount > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                            @cartCount
+                        </span>
+                    }
+                </a>
+                
+                @if (!string.IsNullOrEmpty(userName))
+                {
+                    <div class="dropdown">
+                        <a href="#" class="btn btn-outline-pink rounded-pill px-4 dropdown-toggle" style="border-color: #ffb7c5; color: #d63384;" data-bs-toggle="dropdown">
+                            Chào, @userName
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            @if (role == "admin")
+                            {
+                                <li><a class="dropdown-item" href="/Admin/Dashboard">Quản trị</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            }
+                            <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="/Account/Logout">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="btn btn-outline-pink rounded-pill px-4" style="border-color: #ffb7c5; color: #d63384;">Đăng nhập</a>
+                }
+            </div>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .text-pink { color: #ff8fa3 !important; }
+    .nav-link:hover { color: #ff8fa3 !important; }
+</style>

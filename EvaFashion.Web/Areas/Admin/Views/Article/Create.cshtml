@@ -1,0 +1,67 @@
+@model EvaFashion.Web.Models.BaiViet
+@{
+    ViewData["Title"] = "Viết bài mới";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0">Bài viết mới</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="TieuDe" class="form-label">Tiêu đề bài viết</label>
+                        <input asp-for="TieuDe" class="form-control" />
+                        <span asp-validation-for="TieuDe" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Hình ảnh đại diện</label>
+                        <input type="file" name="fileHinhAnh" class="form-control" accept="image/*" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="MoTa" class="form-label">Mô tả ngắn</label>
+                        <textarea asp-for="MoTa" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NoiDung" class="form-label">Nội dung chi tiết</label>
+                        <textarea asp-for="NoiDung" class="form-control" rows="10"></textarea>
+                        <!-- In real app, integrate CKEditor here -->
+                        <small class="text-muted">Hỗ trợ HTML cơ bản.</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                             <div class="form-check mb-3">
+                                <input class="form-check-input" asp-for="IsPublished" checked />
+                                <label class="form-check-label" asp-for="IsPublished">
+                                    Xuất bản ngay
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" asp-for="NoiBat" />
+                                <label class="form-check-label" asp-for="NoiBat">
+                                    Tin nổi bật
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-primary">Lưu bài viết</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

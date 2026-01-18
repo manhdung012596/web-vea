@@ -1,0 +1,117 @@
+@model IEnumerable<EvaFashion.Web.Models.SanPham>
+@{
+    ViewData["Title"] = "Cửa hàng";
+    var categories = ViewData["Categories"] as List<EvaFashion.Web.Models.DanhMuc>;
+    var currentCatId = ViewData["CurrentCategory"] as int?;
+}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white fw-bold">Danh mục sản phẩm</div>
+                <div class="list-group list-group-flush">
+                    <a href="/Shop" class="list-group-item list-group-item-action @(currentCatId == null ? "active" : "")">Tất cả sản phẩm</a>
+                    @if (categories != null)
+                    {
+                        foreach (var cat in categories)
+                        {
+                            <a href="/Shop?categoryId=@cat.Id" class="list-group-item list-group-item-action @(currentCatId == cat.Id ? "active" : "")">
+                                @cat.TenDanhMuc
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Price Filter (Mockup for now) -->
+             <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white fw-bold">Sắp xếp</div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="?sortOrder=price_asc&categoryId=@currentCatId" class="btn btn-outline-secondary btn-sm">Giá: Thấp đến Cao</a>
+                        <a href="?sortOrder=price_desc&categoryId=@currentCatId" class="btn btn-outline-secondary btn-sm">Giá: Cao đến Thấp</a>
+                        <a href="?sortOrder=date_desc&categoryId=@currentCatId" class="btn btn-outline-secondary btn-sm">Mới nhất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="col-md-9">
+             <div class="d-flex justify-content-between align-items-center mb-4">
+                 <h4 class="fw-bold">
+                     @if(currentCatId != null && categories != null)
+                     {
+                         @categories.FirstOrDefault(c=>c.Id==currentCatId)?.TenDanhMuc
+                     }
+                     else
+                     {
+                         <span>Tất cả sản phẩm</span>
+                     }
+                     <span class="text-muted fs-6 fw-normal">(@Model.Count() sản phẩm)</span>
+                 </h4>
+             </div>
+
+             @if (!Model.Any())
+            {
+                <div class="alert alert-info py-5 text-center">
+                    Chưa có sản phẩm nào trong danh mục này.
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col">
+                             <div class="card h-100 border-0 shadow-sm product-card">
+                                <div class="position-relative overflow-hidden">
+                                    <a href="/Shop/Detail/@item.Id">
+                                        <img src="@(string.IsNullOrEmpty(item.HinhAnhChinh) ? "https://placehold.co/400x500/png?text=No+Image" : item.HinhAnhChinh)" 
+                                             class="card-img-top" alt="@item.TenSanPham">
+                                    </a>
+                                     @if (item.PhanTramGiam > 0)
+                                    {
+                                        <span class="position-absolute top-0 start-0 m-2 badge bg-danger">
+                                            -@item.PhanTramGiam%
+                                        </span>
+                                    }
+                                </div>
+                                <div class="card-body text-center">
+                                    <p class="card-text text-muted small mb-1">@(item.DanhMuc?.TenDanhMuc)</p>
+                                    <h6 class="card-title">
+                                        <a href="/Shop/Detail/@item.Id" class="text-decoration-none text-dark fw-bold">@item.TenSanPham</a>
+                                    </h6>
+                                    <div class="mt-2">
+                                        @if (item.PhanTramGiam > 0)
+                                        {
+                                            <span class="fw-bold text-danger">@item.GiaSauGiam?.ToString("N0") đ</span>
+                                            <small class="text-decoration-line-through text-muted ms-1">@item.GiaGoc.ToString("N0") đ</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="fw-bold text-dark">@item.GiaGoc.ToString("N0") đ</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-card { transition: transform 0.3s; }
+    .product-card:hover { transform: translateY(-5px); }
+    .list-group-item.active {
+        background-color: #ffb7c5;
+        border-color: #ffb7c5;
+        color: #ae4860;
+        font-weight: 600;
+    }
+</style>
