@@ -9,9 +9,9 @@ namespace EvaFashion.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public AccountController(EvaFashionDbContext context)
+        public AccountController(ThoitrangnuContext context)
         {
             _context = context;
         }

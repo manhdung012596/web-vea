@@ -7,9 +7,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class VariantController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public VariantController(EvaFashionDbContext context)
+        public VariantController(ThoitrangnuContext context)
         {
             _context = context;
         }

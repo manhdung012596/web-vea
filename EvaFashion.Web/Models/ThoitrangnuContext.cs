@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EvaFashion.Web.Models
 {
-    public class EvaFashionDbContext : DbContext
+    public class ThoitrangnuContext : DbContext
     {
-        public EvaFashionDbContext(DbContextOptions<EvaFashionDbContext> options) : base(options)
+        public ThoitrangnuContext(DbContextOptions<ThoitrangnuContext> options) : base(options)
         {
         }
 
@@ -23,17 +23,18 @@ namespace EvaFashion.Web.Models
         public DbSet<TrangNoiDung> TrangNoiDungs { get; set; }
         public DbSet<LienHe> LienHes { get; set; }
         public DbSet<DanhGia> DanhGias { get; set; }
+        public DbSet<LichSuDonHang> LichSuDonHangs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             
-            // Additional configuration if needed (e.g. unique constraints already in class attributes)
-            
             // Computed column configuration for SanPham.GiaSauGiam
             modelBuilder.Entity<SanPham>()
                 .Property(p => p.GiaSauGiam)
                 .HasComputedColumnSql("CASE WHEN phanTramGiam > 0 THEN giaGoc - (giaGoc * phanTramGiam / 100) ELSE giaGoc END");
+                
+            // Configure LichSuDonHang if needed (or rely on conventions)
         }
     }
 }

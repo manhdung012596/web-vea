@@ -8,9 +8,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class UserController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public UserController(EvaFashionDbContext context)
+        public UserController(ThoitrangnuContext context)
         {
             _context = context;
         }

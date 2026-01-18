@@ -8,9 +8,9 @@ namespace EvaFashion.Web.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly EvaFashionDbContext _context;
+    private readonly ThoitrangnuContext _context;
 
-    public HomeController(ILogger<HomeController> logger, EvaFashionDbContext context)
+    public HomeController(ILogger<HomeController> logger, ThoitrangnuContext context)
     {
         _logger = logger;
         _context = context;

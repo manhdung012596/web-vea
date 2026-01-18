@@ -5,7 +5,7 @@ namespace EvaFashion.Web.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(EvaFashionDbContext context)
+        public static void Initialize(ThoitrangnuContext context)
         {
             context.Database.EnsureCreated();
 

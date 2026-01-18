@@ -10,9 +10,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class AuthController : Controller
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public AuthController(EvaFashionDbContext context)
+        public AuthController(ThoitrangnuContext context)
         {
             _context = context;
         }

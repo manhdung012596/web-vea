@@ -7,10 +7,10 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class ProductController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(EvaFashionDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ProductController(ThoitrangnuContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;

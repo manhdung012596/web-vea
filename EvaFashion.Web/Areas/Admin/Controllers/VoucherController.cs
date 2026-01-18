@@ -6,9 +6,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class VoucherController : BaseAdminController
     {
-         private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public VoucherController(EvaFashionDbContext context)
+        public VoucherController(ThoitrangnuContext context)
         {
             _context = context;
         }

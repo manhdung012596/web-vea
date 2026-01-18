@@ -6,9 +6,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class OrderController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public OrderController(EvaFashionDbContext context)
+        public OrderController(ThoitrangnuContext context)
         {
             _context = context;
         }

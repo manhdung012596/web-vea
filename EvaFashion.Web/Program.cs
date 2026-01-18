@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddDbContext<EvaFashionDbContext>(options =>
+builder.Services.AddDbContext<ThoitrangnuContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllersWithViews();
@@ -19,7 +19,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var context = services.GetRequiredService<EvaFashionDbContext>();
+        var context = services.GetRequiredService<ThoitrangnuContext>();
         EvaFashion.Web.Data.DbInitializer.Initialize(context);
     }
     catch (Exception ex)

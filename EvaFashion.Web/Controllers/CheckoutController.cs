@@ -7,9 +7,9 @@ namespace EvaFashion.Web.Controllers
 {
     public class CheckoutController : Controller
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public CheckoutController(EvaFashionDbContext context)
+        public CheckoutController(ThoitrangnuContext context)
         {
             _context = context;
         }

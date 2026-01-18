@@ -6,9 +6,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class SeedController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public SeedController(EvaFashionDbContext context)
+        public SeedController(ThoitrangnuContext context)
         {
             _context = context;
         }

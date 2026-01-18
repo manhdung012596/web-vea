@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarContent">
 @using EvaFashion.Web.Models
 @using Microsoft.EntityFrameworkCore
-@inject EvaFashionDbContext _context
+@inject ThoitrangnuContext _context
 @{
     var categories = await _context.DanhMucs.Take(5).ToListAsync();
 }

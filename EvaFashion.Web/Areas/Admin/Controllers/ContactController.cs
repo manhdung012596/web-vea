@@ -6,9 +6,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class ContactController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public ContactController(EvaFashionDbContext context)
+        public ContactController(ThoitrangnuContext context)
         {
             _context = context;
         }

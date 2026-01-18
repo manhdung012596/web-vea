@@ -6,9 +6,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 {
     public class ColorController : BaseAdminController
     {
-        private readonly EvaFashionDbContext _context;
+        private readonly ThoitrangnuContext _context;
 
-        public ColorController(EvaFashionDbContext context)
+        public ColorController(ThoitrangnuContext context)
         {
             _context = context;
         }
