@@ -5,20 +5,20 @@ USE master;
 GO
 
 -- XÓA DATABASE CŨ NẾU TỒN TẠI (ĐỂ LÀM MỚI DỮ LIỆU) --
-IF EXISTS (SELECT * FROM sys.databases WHERE name = N'thoitrangnu')
+IF EXISTS (SELECT * FROM sys.databases WHERE name = N'thoitrangeva')
 BEGIN
-    ALTER DATABASE thoitrangnu SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE thoitrangnu;
+    ALTER DATABASE thoitrangeva SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE thoitrangeva;
 END;
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = N'thoitrangnu')
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = N'thoitrangeva')
 BEGIN
-    CREATE DATABASE thoitrangnu;
+    CREATE DATABASE thoitrangeva;
 END;
 GO
 
-USE thoitrangnu;
+USE thoitrangeva;
 GO
 
 -----------------------------------------------
