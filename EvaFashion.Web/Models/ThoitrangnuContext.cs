@@ -14,6 +14,7 @@ namespace EvaFashion.Web.Models
         public DbSet<KichCo> KichCos { get; set; }
         public DbSet<SanPham> SanPhams { get; set; }
         public DbSet<BienTheSanPham> BienTheSanPhams { get; set; }
+        public DbSet<AnhSanPham> AnhSanPhams { get; set; }
         public DbSet<GioHang> GioHangs { get; set; }
         public DbSet<GioHangChiTiet> GioHangChiTiets { get; set; }
         public DbSet<DonHang> DonHangs { get; set; }

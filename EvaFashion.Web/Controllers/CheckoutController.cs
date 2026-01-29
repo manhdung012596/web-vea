@@ -14,6 +14,16 @@ namespace EvaFashion.Web.Controllers
             _context = context;
         }
 
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
+        {
+            var role = context.HttpContext.Session.GetString("Role");
+            if (role == "admin")
+            {
+                context.Result = new RedirectToActionResult("Index", "Dashboard", new { area = "Admin" });
+            }
+            base.OnActionExecuting(context);
+        }
+
         private List<CartItem> GetCart()
         {
             var sessionCart = HttpContext.Session.GetString("Cart");
@@ -97,9 +107,11 @@ namespace EvaFashion.Web.Controllers
             }
         }
 
-        public IActionResult Success(string id)
+        public async Task<IActionResult> Success(string id)
         {
-            return View(model: id);
+            var order = await _context.DonHangs.FirstOrDefaultAsync(d => d.MaDonHangCode == id);
+            if (order == null) return RedirectToAction("Index", "Home");
+            return View(order);
         }
     }
 }

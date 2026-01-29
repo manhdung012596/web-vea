@@ -1,4 +1,4 @@
-@model string
+@model EvaFashion.Web.Models.DonHang
 @{
     ViewData["Title"] = "Đặt hàng thành công";
 }
@@ -8,8 +8,34 @@
         <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
     </div>
     <h2 class="fw-bold mb-3">Cảm ơn bạn đã đặt hàng!</h2>
-    <p class="fs-5 text-muted mb-4">Mã đơn hàng của bạn là: <strong class="text-dark">@Model</strong></p>
+    <p class="fs-5 text-muted mb-4">Mã đơn hàng của bạn là: <strong class="text-dark">@Model.MaDonHangCode</strong></p>
     
+    @if (Model.PhuongThucThanhToan == "QR")
+    {
+        <div class="card shadow-sm mx-auto mb-4" style="max-width: 400px;">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0 fw-bold">THANH TOÁN QR CODE</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">Quét mã để thanh toán</p>
+                @{
+                    var qrUrl = $"https://img.vietqr.io/image/Vietcombank-1045004230-compact2.png?amount={Model.TongTien}&addInfo={Model.MaDonHangCode}&accountName=TA THI HONG";
+                }
+                <img src="@qrUrl" alt="VietQR" class="img-fluid mb-3" style="max-width: 300px;" />
+                <div class="text-start px-3">
+                    <p class="mb-1"><strong>Ngân hàng:</strong> Vietcombank</p>
+                    <p class="mb-1"><strong>Số tài khoản:</strong> 1045004230</p>
+                    <p class="mb-1"><strong>Chủ tài khoản:</strong> TA THI HONG</p>
+                    <p class="mb-1"><strong>Số tiền:</strong> <span class="text-danger fw-bold">@Model.TongTien?.ToString("N0") đ</span></p>
+                    <p class="mb-0"><strong>Nội dung:</strong> @Model.MaDonHangCode</p>
+                </div>
+            </div>
+             <div class="card-footer bg-light">
+                <small class="text-muted">Vui lòng kiểm tra kỹ thông tin trước khi chuyển khoản</small>
+            </div>
+        </div>
+    }
+
     <p>Chúng tôi sẽ sớm liên hệ để xác nhận đơn hàng của bạn.</p>
 
     <div class="mt-4">

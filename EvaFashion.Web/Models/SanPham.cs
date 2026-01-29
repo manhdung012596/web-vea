@@ -89,5 +89,6 @@ namespace EvaFashion.Web.Models
         public virtual NguoiDung? NguoiCapNhat { get; set; }
 
         public virtual ICollection<BienTheSanPham> BienTheSanPhams { get; set; } = new List<BienTheSanPham>();
+        public virtual ICollection<AnhSanPham> AnhSanPhams { get; set; } = new List<AnhSanPham>();
     }
 }

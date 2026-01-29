@@ -33,7 +33,7 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SanPham sanPham, IFormFile? fileHinhAnh)
+        public async Task<IActionResult> Create(SanPham sanPham, IFormFile? fileHinhAnh, List<IFormFile>? moreImages)
         {
             // Slug is generated manually, so remove it from validation
             ModelState.Remove("Slug");
@@ -74,6 +74,32 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
                             await fileHinhAnh.CopyToAsync(fileStream);
                         }
                         sanPham.HinhAnhChinh = "/" + folder + fileName;
+                        sanPham.HinhAnhChinh = "/" + folder + fileName;
+                    }
+
+                    // Handle Multiple Images
+                    if (moreImages != null && moreImages.Count > 0)
+                    {
+                        string folder = "images/products/";
+                        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                        if (!Directory.Exists(serverFolder)) Directory.CreateDirectory(serverFolder);
+
+                        foreach (var file in moreImages)
+                        {
+                            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                            string filePath = Path.Combine(serverFolder, fileName);
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(fileStream);
+                            }
+                            
+                            var anhSanPham = new AnhSanPham()
+                            {
+                                Url = "/" + folder + fileName,
+                                CreatedAt = DateTime.Now
+                            };
+                            sanPham.AnhSanPhams.Add(anhSanPham);
+                        }
                     }
 
                     // Set default Meta if empty

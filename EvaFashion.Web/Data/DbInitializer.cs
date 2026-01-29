@@ -9,6 +9,22 @@ namespace EvaFashion.Web.Data
         {
             context.Database.EnsureCreated();
 
+            // Auto-migration for AnhSanPham table
+            try
+            {
+                context.Database.ExecuteSqlRaw(@"
+                    IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='AnhSanPham' AND xtype='U')
+                    CREATE TABLE AnhSanPham (
+                        id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                        sanPhamId int NOT NULL,
+                        url nvarchar(255) NULL,
+                        createdAt datetime2 NULL,
+                        CONSTRAINT FK_AnhSanPham_SanPham_sanPhamId FOREIGN KEY (sanPhamId) REFERENCES SanPham (id) ON DELETE CASCADE
+                    );
+                ");
+            }
+            catch (Exception) { /* Ignore if fails, let EF handle or user handle */ }
+
             // 0. Users (Admin)
             if (!context.NguoiDungs.Any(u => u.TenDangNhap == "admin"))
             {

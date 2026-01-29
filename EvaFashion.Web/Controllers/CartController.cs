@@ -14,6 +14,16 @@ namespace EvaFashion.Web.Controllers
             _context = context;
         }
 
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
+        {
+            var role = context.HttpContext.Session.GetString("Role");
+            if (role == "admin")
+            {
+                context.Result = new RedirectToActionResult("Index", "Dashboard", new { area = "Admin" });
+            }
+            base.OnActionExecuting(context);
+        }
+
         // Get Cart from Session
         private List<CartItem> GetCart()
         {
@@ -47,9 +57,8 @@ namespace EvaFashion.Web.Controllers
 
             if (variant == null)
             {
-                // Variant not found 
+                TempData["Error"] = "Phiên bản sản phẩm (Màu/Size) này không tồn tại hoặc đã hết hàng!";
                 return RedirectToAction("Detail", "Shop", new { id = productId });
-                // Should add flash message here "Out of stock / Invalid"
             }
 
             var cart = GetCart();
