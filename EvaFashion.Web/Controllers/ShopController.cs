@@ -70,6 +70,8 @@ namespace EvaFashion.Web.Controllers
                     .ThenInclude(btc => btc.MauSac)
                 .Include(p => p.BienTheSanPhams)
                     .ThenInclude(btc => btc.KichCo)
+                .Include(p => p.DanhGias)
+                    .ThenInclude(d => d.NguoiDung)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null) return NotFound();
@@ -93,6 +95,34 @@ namespace EvaFashion.Web.Controllers
                 .ToListAsync();
 
             return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddReview(int productId, int rating, string content)
+        {
+            // Check login via Session (UserId stored as Int32)
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (!userId.HasValue)
+            {
+                return RedirectToAction("Login", "Account"); 
+            }
+
+            if (rating < 1) rating = 1;
+            if (rating > 5) rating = 5;
+
+            var review = new DanhGia
+            {
+                SanPhamId = productId,
+                MaNguoiDung = userId.Value,
+                SoSao = rating,
+                NoiDung = content,
+                NgayDanhGia = DateTime.Now
+            };
+
+            _context.DanhGias.Add(review);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Detail", new { id = productId });
         }
     }
 }

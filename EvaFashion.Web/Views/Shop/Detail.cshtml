@@ -4,6 +4,12 @@
     var colors = ViewBag.Colors as List<EvaFashion.Web.Models.MauSac>;
     var sizes = ViewBag.Sizes as List<EvaFashion.Web.Models.KichCo>;
     var relatedProducts = ViewBag.RelatedProducts as List<EvaFashion.Web.Models.SanPham>;
+    
+    // Review Stats
+    var averageRating = Model.DanhGias != null && Model.DanhGias.Any() ? Model.DanhGias.Average(d => d.SoSao) : 0;
+    var reviewCount = Model.DanhGias != null ? Model.DanhGias.Count : 0;
+    var fullStars = (int)(averageRating ?? 0);
+    var hasHalfStar = (averageRating - fullStars) >= 0.5;
 }
 
 <div class="container py-5">
@@ -22,13 +28,14 @@
             <h1 class="fw-bold fs-2">@Model.TenSanPham</h1>
             <div class="d-flex align-items-center mb-3">
                 <div class="text-warning small me-2">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-half"></i>
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= fullStars) { <i class="bi bi-star-fill"></i> }
+                        else if (i == fullStars + 1 && hasHalfStar) { <i class="bi bi-star-half"></i> }
+                        else { <i class="bi bi-star"></i> }
+                    }
                 </div>
-                <small class="text-muted">(Đánh giá giả định)</small>
+                <small class="text-muted">(@reviewCount đánh giá)</small>
             </div>
 
             <div class="mb-4">
@@ -137,6 +144,78 @@
                      <div id="policy" class="accordion-collapse collapse" data-bs-parent="#prodAccordion">
                         <div class="accordion-body text-muted small">
                             Đổi trả miễn phí trong vòng 7 ngày nếu lỗi do nhà sản xuất.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                     <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#reviews">
+                            Đánh giá (@reviewCount)
+                        </button>
+                    </h2>
+                     <div id="reviews" class="accordion-collapse collapse" data-bs-parent="#prodAccordion">
+                        <div class="accordion-body">
+                             @if (Model.DanhGias != null && Model.DanhGias.Any())
+                            {
+                                foreach (var review in Model.DanhGias.OrderByDescending(r => r.NgayDanhGia))
+                                {
+                                    <div class="mb-3 border-bottom pb-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fw-bold">@(review.NguoiDung?.HoTen ?? "Khách")</span>
+                                            <small class="text-muted">@review.NgayDanhGia?.ToString("dd/MM/yyyy")</small>
+                                        </div>
+                                        <div class="text-warning small mb-1">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.SoSao) { <i class="bi bi-star-fill"></i> }
+                                                else { <i class="bi bi-star"></i> }
+                                            }
+                                        </div>
+                                        <p class="mb-0 text-muted">@review.NoiDung</p>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted">Chưa có đánh giá nào.</p>
+                            }
+
+                             @{
+                                // Reuse HttpContextAccessor injected earlier if available, or just use Context
+                                var isLoggedIn = Context.Session.GetInt32("UserId").HasValue;
+                            }
+
+                            @if (isLoggedIn)
+                            {
+                                <form asp-controller="Shop" asp-action="AddReview" method="post" class="mt-4">
+                                    <input type="hidden" name="productId" value="@Model.Id" />
+                                    <h5 class="fw-bold mb-3">Viết đánh giá của bạn</h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Đánh giá:</label>
+                                        <select name="rating" class="form-select w-auto">
+                                            <option value="5">5 sao - Tuyệt vời</option>
+                                            <option value="4">4 sao - Rất tốt</option>
+                                            <option value="3">3 sao - Bình thường</option>
+                                            <option value="2">2 sao - Tệ</option>
+                                            <option value="1">1 sao - Rất tệ</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Nội dung:</label>
+                                        <textarea name="content" class="form-control" rows="3" required placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-dark">Gửi đánh giá</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="mt-3">
+                                    <a href="/Account/Login" class="btn btn-outline-dark btn-sm">Đăng nhập để đánh giá</a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
