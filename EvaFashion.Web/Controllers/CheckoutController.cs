@@ -61,10 +61,10 @@ namespace EvaFashion.Web.Controllers
                 order.TrangThaiThanhToan = "ChuaThanhToan";
 
                 // If logged in, link user
-                var userIdStr = HttpContext.Session.GetString("UserId");
-                if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userId))
+                var userId = HttpContext.Session.GetInt32("UserId");
+                if (userId.HasValue)
                 {
-                    order.MaNguoiDung = userId;
+                    order.MaNguoiDung = userId.Value;
                 }
 
                 _context.Add(order);

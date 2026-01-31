@@ -4718,7 +4718,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "D:\\web-vea\\EvaFashion.Web\\EvaFashion.csproj",
-      "projectName": "EvaFashion",
+      "projectName": "EvaFashionApp",
       "projectPath": "D:\\web-vea\\EvaFashion.Web\\EvaFashion.csproj",
       "packagesPath": "C:\\Users\\manhd\\.nuget\\packages\\",
       "outputPath": "D:\\web-vea\\EvaFashion.Web\\obj\\",

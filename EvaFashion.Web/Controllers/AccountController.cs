@@ -97,6 +97,22 @@ namespace EvaFashion.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> History()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (!userId.HasValue)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var orders = await _context.DonHangs
+                .Where(o => o.MaNguoiDung == userId.Value)
+                .OrderByDescending(o => o.NgayDat)
+                .ToListAsync();
+
+            return View(orders);
+        }
+
         private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())

@@ -1,0 +1,69 @@
+@model IEnumerable<EvaFashion.Web.Models.DonHang>
+
+@{
+    ViewData["Title"] = "Lịch sử đơn hàng";
+}
+
+<div class="container py-5">
+    <h2 class="text-center mb-4 brand-font text-pink">Lịch sử đơn hàng</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            Bạn chưa có đơn hàng nào. <a href="/Shop" class="alert-link">Mua sắm ngay</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="bg-pink text-white">
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>#@order.MaDonHang</td>
+                            <td>@order.NgayDat?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="fw-bold text-pink">@order.TongTien?.ToString("N0") đ</td>
+                            <td>
+                                @if(order.TrangThai == "ChoXacNhan") {
+                                    <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                } else if(order.TrangThai == "DaXacNhan") {
+                                      <span class="badge bg-info">Đã xác nhận</span>
+                                } else if(order.TrangThai == "DangGiao") {
+                                     <span class="badge bg-primary">Đang giao</span>
+                                } else if(order.TrangThai == "HoanThanh") {
+                                     <span class="badge bg-success">Hoàn thành</span>
+                                } else if(order.TrangThai == "DaHuy") {
+                                     <span class="badge bg-secondary">Đã hủy</span>
+                                } else {
+                                    <span class="badge bg-light text-dark">@order.TrangThai</span>
+                                }
+                            </td>
+                            <td>
+                                <!-- Note: User-side detail view is not yet implemented/requested, 
+                                     but this would link to it if it existed. 
+                                     For now we just show generic info or link to nothing/placeholder if needed. 
+                                     However, typically users want to see details. 
+                                     If Detail action specific to user doesn't exist, maybe reuse Admin detail logic 
+                                     or just leave it out. The plan didn't specify a User Detail view, just History. 
+                                     I'll leave it as a placeholder or remove the column if too complex.
+                                     Actually, usually users just want to see the list. 
+                                     Let's keep it simple. -->
+                                <button class="btn btn-sm btn-outline-pink" disabled>Xem ngay</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

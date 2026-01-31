@@ -107,6 +107,18 @@ namespace EvaFashion.Web.Controllers
                 return RedirectToAction("Login", "Account"); 
             }
 
+            // Check if user has purchased the product and order is "HoanThanh"
+            var hasPurchased = await _context.DonHangs
+                .AnyAsync(dh => dh.MaNguoiDung == userId.Value 
+                                && dh.TrangThai == "HoanThanh" 
+                                && dh.ChiTietDonHangs.Any(ct => ct.BienTheSanPham.SanPhamId == productId));
+
+            if (!hasPurchased)
+            {
+                // Optionally set an error message in TempData
+                return RedirectToAction("Detail", new { id = productId });
+            }
+
             if (rating < 1) rating = 1;
             if (rating > 5) rating = 5;
 
