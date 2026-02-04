@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EvaFashionApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95063e717ed0e7d7ef8b40c3f78cc0b90174dcf0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5241c9b809da21d1e9f4764368e9b1ce6db1fb31")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvaFashionApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvaFashionApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

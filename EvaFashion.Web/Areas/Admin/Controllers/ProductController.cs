@@ -122,7 +122,9 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
         {
             if (id == null) return NotFound();
 
-            var sanPham = await _context.SanPhams.FindAsync(id);
+            var sanPham = await _context.SanPhams
+                .Include(p => p.AnhSanPhams)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (sanPham == null) return NotFound();
 
             ViewData["DanhMucId"] = new SelectList(_context.DanhMucs, "Id", "TenDanhMuc", sanPham.DanhMucId);
@@ -131,7 +133,7 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SanPham sanPham, IFormFile? fileHinhAnh)
+        public async Task<IActionResult> Edit(int id, SanPham sanPham, IFormFile? fileHinhAnh, List<IFormFile>? moreImages, List<int>? deletedImageIds)
         {
             if (id != sanPham.Id) return NotFound();
 
@@ -197,6 +199,54 @@ namespace EvaFashion.Web.Areas.Admin.Controllers
                     sanPham.CreatedAt = existingProduct?.CreatedAt;
                     sanPham.CreatedBy = existingProduct?.CreatedBy;
                     sanPham.UpdatedAt = DateTime.Now;
+
+                    // Handle Image Deletion
+                    if (deletedImageIds != null && deletedImageIds.Any())
+                    {
+                        var imagesToDelete = await _context.AnhSanPhams
+                            .Where(a => deletedImageIds.Contains(a.Id) && a.SanPhamId == id)
+                            .ToListAsync();
+                        
+                        // Optional: Delete physical files
+                        foreach (var img in imagesToDelete)
+                        {
+                            if (!string.IsNullOrEmpty(img.Url))
+                            {
+                                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, img.Url.TrimStart('/'));
+                                if (System.IO.File.Exists(filePath))
+                                {
+                                    System.IO.File.Delete(filePath);
+                                }
+                            }
+                        }
+                        _context.AnhSanPhams.RemoveRange(imagesToDelete);
+                    }
+
+                    // Handle New Images
+                    if (moreImages != null && moreImages.Count > 0)
+                    {
+                        string folder = "images/products/";
+                        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                        if (!Directory.Exists(serverFolder)) Directory.CreateDirectory(serverFolder);
+
+                        foreach (var file in moreImages)
+                        {
+                            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                            string filePath = Path.Combine(serverFolder, fileName);
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(fileStream);
+                            }
+                            
+                            var anhSanPham = new AnhSanPham()
+                            {
+                                SanPhamId = id, // Link to current product
+                                Url = "/" + folder + fileName,
+                                CreatedAt = DateTime.Now
+                            };
+                            _context.AnhSanPhams.Add(anhSanPham);
+                        }
+                    }
 
                     _context.Update(sanPham);
                     await _context.SaveChangesAsync();

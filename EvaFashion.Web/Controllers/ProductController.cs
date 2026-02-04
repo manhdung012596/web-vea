@@ -16,6 +16,7 @@ namespace EvaFashion.Web.Controllers
         public async Task<IActionResult> Detail(int id)
         {
             var product = await _context.SanPhams
+                .Include(p => p.AnhSanPhams)
                 .Include(p => p.BienTheSanPhams)
                 .ThenInclude(bt => bt.MauSac)
                 .Include(p => p.BienTheSanPhams)

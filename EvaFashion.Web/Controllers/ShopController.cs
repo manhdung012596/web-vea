@@ -66,6 +66,7 @@ namespace EvaFashion.Web.Controllers
 
             var product = await _context.SanPhams
                 .Include(p => p.DanhMuc)
+                .Include(p => p.AnhSanPhams)
                 .Include(p => p.BienTheSanPhams)
                     .ThenInclude(btc => btc.MauSac)
                 .Include(p => p.BienTheSanPhams)

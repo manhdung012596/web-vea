@@ -1,6 +1,5 @@
 D:\web-vea\EvaFashion.Web\bin\Debug\net9.0\appsettings.Development.json
 D:\web-vea\EvaFashion.Web\bin\Debug\net9.0\appsettings.json
-D:\web-vea\EvaFashion.Web\bin\Debug\net9.0\EvaFashion.exe
 D:\web-vea\EvaFashion.Web\bin\Debug\net9.0\Azure.Core.dll
 D:\web-vea\EvaFashion.Web\bin\Debug\net9.0\Azure.Identity.dll
 D:\web-vea\EvaFashion.Web\bin\Debug\net9.0\Humanizer.dll
@@ -219,3 +218,4 @@ D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\refint\EvaFashionApp.dll
 D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\EvaFashionApp.pdb
 D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\EvaFashion.genruntimeconfig.cache
 D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\ref\EvaFashionApp.dll
+D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
