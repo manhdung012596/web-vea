@@ -218,4 +218,3 @@ D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\refint\EvaFashionApp.dll
 D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\EvaFashionApp.pdb
 D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\EvaFashion.genruntimeconfig.cache
 D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\ref\EvaFashionApp.dll
-D:\web-vea\EvaFashion.Web\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

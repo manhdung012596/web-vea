@@ -10,6 +10,7 @@ builder.Services.AddDbContext<ThoitrangnuContext>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddSingleton<EvaFashion.Web.Services.IEmailService, EvaFashion.Web.Services.EmailService>();
 
 var app = builder.Build();
 

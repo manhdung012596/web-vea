@@ -39,5 +39,12 @@ namespace EvaFashion.Web.Models
 
         [Column("ngayTao")]
         public DateTime? NgayTao { get; set; } = DateTime.Now;
+
+        [Column("ResetToken")]
+        [StringLength(100)]
+        public string? ResetToken { get; set; }
+
+        [Column("ResetTokenExpiry")]
+        public DateTime? ResetTokenExpiry { get; set; }
     }
 }

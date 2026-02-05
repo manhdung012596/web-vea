@@ -1,0 +1,6 @@
+ALTER TABLE NguoiDung
+ADD ResetToken NVARCHAR(100) NULL;
+
+ALTER TABLE NguoiDung
+ADD ResetTokenExpiry DATETIME NULL;
+GO
